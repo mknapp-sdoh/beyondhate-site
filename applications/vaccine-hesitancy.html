@@ -16,6 +16,59 @@
       <p class="subtitle">Beyond the chatbot. Toward trusted networks.</p>
 
       <div class="content">
+        <div class="contrast">
+          <p><strong>Try the DAWN prototype:</strong> DAWN helps kindergartens reach 95% MMR vaccination&mdash;the threshold for herd immunity against measles. It engages hesitant parents with empathy and evidence.</p>
+          <button id="dawn-start-btn" onclick="showIntakeForm()">Start Demo</button>
+        </div>
+
+        <!-- Intake Form (hidden initially) -->
+        <div id="dawn-intake" class="dawn-panel" style="display: none;">
+          <h3>Help DAWN understand your situation</h3>
+          <p class="dawn-subtitle">This helps personalize the conversation to your specific concerns.</p>
+
+          <div class="dawn-form-group">
+            <label>How do you feel about vaccinating your child?</label>
+            <select id="dawn-stage">
+              <option value="contemplation">I'm considering but have concerns</option>
+              <option value="pre_contemplation">I'm opposed to vaccines</option>
+              <option value="preparation">I'm planning to vaccinate soon</option>
+            </select>
+          </div>
+
+          <div class="dawn-form-group">
+            <label>How much do you trust medical institutions?</label>
+            <select id="dawn-trust">
+              <option value="moderate">Somewhat trust them</option>
+              <option value="high">I trust them</option>
+              <option value="low">I don't trust them much</option>
+            </select>
+          </div>
+
+          <div class="dawn-form-group">
+            <label>What concerns do you have? (Select all that apply)</label>
+            <div class="dawn-concerns">
+              <label><input type="checkbox" value="autism_fear"> Autism concerns</label>
+              <label><input type="checkbox" value="side_effects"> Side effects</label>
+              <label><input type="checkbox" value="too_many_vaccines"> Too many vaccines</label>
+              <label><input type="checkbox" value="natural_immunity"> Natural immunity</label>
+              <label><input type="checkbox" value="distrust_institutions"> Don't trust institutions</label>
+              <label><input type="checkbox" value="ingredient_fears"> Vaccine ingredients</label>
+            </div>
+          </div>
+
+          <button id="dawn-begin-chat" onclick="startChat()">Start Conversation</button>
+        </div>
+
+        <!-- Chat Area (hidden initially) -->
+        <div id="dawn-chat" class="dawn-panel" style="display: none;">
+          <div id="dawn-messages"></div>
+          <div id="dawn-input-area">
+            <input type="text" id="dawn-input" placeholder="Share your thoughts..." />
+            <button id="dawn-send">Send</button>
+          </div>
+          <p id="dawn-status"></p>
+        </div>
+
         <p>Measles cases are rising. Vaccination rates are falling. And the gap between public health messaging and parental concerns keeps growing.</p>
 
         <p>The typical response is more information: fact sheets, debunking articles, CDC statistics. But information alone doesn't change minds&mdash;especially when trust has eroded.</p>
@@ -110,5 +163,230 @@
       </footer>
     </div>
   </main>
+<style>
+  #dawn-start-btn, #dawn-begin-chat {
+    padding: 0.6rem 1.2rem;
+    background: var(--accent-green);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 0.75rem;
+  }
+  #dawn-start-btn:hover, #dawn-begin-chat:hover {
+    opacity: 0.9;
+  }
+  .dawn-panel {
+    margin-top: 1rem;
+    padding: 1.25rem;
+    background: #fff;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .dawn-panel h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+  .dawn-subtitle {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  .dawn-form-group {
+    margin-bottom: 1rem;
+  }
+  .dawn-form-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+  }
+  .dawn-form-group select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  .dawn-concerns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .dawn-concerns label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: normal;
+    padding: 0.4rem;
+    background: var(--bg-gray);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .dawn-concerns label:hover {
+    background: #e8e8e8;
+  }
+  #dawn-messages {
+    max-height: 450px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: var(--bg-gray);
+    border-radius: 4px;
+    min-height: 200px;
+  }
+  .dawn-message {
+    margin-bottom: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: 8px;
+    line-height: 1.5;
+  }
+  .dawn-message.user {
+    background: var(--header-blue);
+    color: white;
+    margin-left: 20%;
+  }
+  .dawn-message.assistant {
+    background: #fff;
+    border: 1px solid var(--border);
+    margin-right: 20%;
+  }
+  #dawn-input-area {
+    display: flex;
+    gap: 0.5rem;
+  }
+  #dawn-input {
+    flex: 1;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  #dawn-send {
+    padding: 0.6rem 1.2rem;
+    background: var(--accent-green);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  #dawn-send:hover {
+    opacity: 0.9;
+  }
+  #dawn-send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  #dawn-status {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+  }
+</style>
+
+<script>
+const API_URL = 'https://beyondhate-api.mknapp.workers.dev/';
+let conversationHistory = [];
+let parentProfile = {};
+
+function showIntakeForm() {
+  document.getElementById('dawn-start-btn').style.display = 'none';
+  document.getElementById('dawn-intake').style.display = 'block';
+}
+
+function startChat() {
+  // Collect profile data
+  const stage = document.getElementById('dawn-stage').value;
+  const trustLevel = document.getElementById('dawn-trust').value;
+  const concernCheckboxes = document.querySelectorAll('.dawn-concerns input:checked');
+  const concerns = Array.from(concernCheckboxes).map(cb => cb.value);
+
+  if (concerns.length === 0) {
+    alert('Please select at least one concern.');
+    return;
+  }
+
+  parentProfile = { stage, trustLevel, concerns };
+
+  // Hide intake, show chat
+  document.getElementById('dawn-intake').style.display = 'none';
+  document.getElementById('dawn-chat').style.display = 'block';
+
+  // Add welcome message based on profile
+  const messagesEl = document.getElementById('dawn-messages');
+  const welcomeMsg = "Hi, I'm DAWN. I understand you're a parent at a kindergarten working toward the 95% vaccination threshold to protect all children from measles. I'm here to have an honest conversation about any concerns you have about the MMR vaccine. What's on your mind?";
+  addMessage(welcomeMsg, 'assistant');
+  conversationHistory.push({ role: 'assistant', content: welcomeMsg });
+
+  document.getElementById('dawn-input').focus();
+}
+
+function addMessage(content, role) {
+  const messagesEl = document.getElementById('dawn-messages');
+  const div = document.createElement('div');
+  div.className = `dawn-message ${role}`;
+  div.textContent = content;
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+async function sendMessage() {
+  const inputEl = document.getElementById('dawn-input');
+  const sendBtn = document.getElementById('dawn-send');
+  const statusEl = document.getElementById('dawn-status');
+  const message = inputEl.value.trim();
+  if (!message) return;
+
+  addMessage(message, 'user');
+  conversationHistory.push({ role: 'user', content: message });
+  inputEl.value = '';
+  sendBtn.disabled = true;
+  statusEl.textContent = 'DAWN is thinking...';
+
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: message,
+        profile: parentProfile,
+        conversationHistory: conversationHistory.slice(-6)
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.error) {
+      if (data.error === 'Rate limit reached') {
+        statusEl.textContent = data.message;
+      } else {
+        statusEl.textContent = 'Sorry, something went wrong. Please try again.';
+      }
+      return;
+    }
+
+    addMessage(data.response, 'assistant');
+    conversationHistory.push({ role: 'assistant', content: data.response });
+    statusEl.textContent = data.messagesRemaining !== undefined
+      ? `${data.messagesRemaining} messages remaining in demo`
+      : '';
+  } catch (err) {
+    statusEl.textContent = 'Connection error. Please try again.';
+  } finally {
+    sendBtn.disabled = false;
+    inputEl.focus();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('dawn-send').addEventListener('click', sendMessage);
+  document.getElementById('dawn-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+  });
+});
+</script>
 </body>
 </html>

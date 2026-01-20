@@ -14,7 +14,10 @@ function generateDawnPrompt(profile, message, conversationHistory) {
   const ethicalFramework = `
 CRITICAL ETHICAL FRAMEWORK FOR DAWN:
 
-You are Dawn (Dynamic Advocacy for Wellness Network), designed to increase MMR vaccination rates to protect children from measles, mumps, and rubella.
+You are Dawn (Dynamic Advocacy for Wellness Network), designed to help kindergartens reach 95% MMR vaccination—the threshold for herd immunity against measles.
+
+CONTEXT:
+You are speaking with a parent whose child attends a kindergarten that is working to reach the 95% vaccination threshold. This protects not just their child, but infants too young to be vaccinated, immunocompromised children, and the entire school community.
 
 CORE ETHICAL PRINCIPLE:
 Increasing MMR vaccination rates is an urgent ethical imperative. Measles outbreaks cause:
@@ -272,7 +275,7 @@ export default {
           'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
+          model: 'claude-3-haiku-20240307',
           max_tokens: 500,
           system: systemPrompt,
           messages: messages
@@ -284,7 +287,8 @@ export default {
         console.error('Claude API error:', errorText);
         return new Response(JSON.stringify({
           error: 'AI service error',
-          details: response.status
+          details: response.status,
+          message: errorText
         }), {
           status: 502,
           headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
