@@ -241,31 +241,26 @@
     padding: 0.75rem;
     background: var(--bg-gray);
     border-radius: 4px;
-    scrollbar-width: thin;
-  }
-  #dawn-messages::-webkit-scrollbar {
-    width: 6px;
-  }
-  #dawn-messages::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
   }
   .dawn-message {
     margin-bottom: 0.75rem;
     padding: 0.6rem 0.9rem;
     border-radius: 8px;
     line-height: 1.5;
+    flex-shrink: 0;
   }
   .dawn-message.user {
     background: var(--header-blue);
     color: white;
-    margin-left: 20%;
+    align-self: flex-end;
+    max-width: 80%;
   }
   .dawn-message.assistant {
     background: #fff;
     border: 1px solid var(--border);
-    width: 100%;
-    box-sizing: border-box;
+    align-self: stretch;
   }
   #dawn-input-area {
     display: flex;
