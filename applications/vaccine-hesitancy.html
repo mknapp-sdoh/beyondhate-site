@@ -15,7 +15,8 @@
       <h1>Addressing Vaccine Hesitancy</h1>
       <p class="subtitle">Beyond the chatbot. Toward trusted networks.</p>
 
-      <div class="content">
+      <!-- Demo section - outside content constraint for more width -->
+      <div class="dawn-demo-section">
         <div class="contrast">
           <p><strong>Try the DAWN prototype:</strong> DAWN helps kindergartens reach 95% MMR vaccination&mdash;the threshold for herd immunity against measles. It engages hesitant parents with empathy and evidence.</p>
           <button id="dawn-start-btn" onclick="showIntakeForm()">Start Demo</button>
@@ -68,7 +69,9 @@
           </div>
           <p id="dawn-status"></p>
         </div>
+      </div>
 
+      <div class="content">
         <p>Measles cases are rising. Vaccination rates are falling. And the gap between public health messaging and parental concerns keeps growing.</p>
 
         <p>The typical response is more information: fact sheets, debunking articles, CDC statistics. But information alone doesn't change minds&mdash;especially when trust has eroded.</p>
@@ -176,6 +179,10 @@
   }
   #dawn-start-btn:hover, #dawn-begin-chat:hover {
     opacity: 0.9;
+  }
+  .dawn-demo-section {
+    max-width: 900px;
+    margin: 0 auto 2rem auto;
   }
   .dawn-panel {
     margin-top: 1rem;
