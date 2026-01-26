@@ -213,6 +213,7 @@ th {
   background: var(--white);
   padding: 1.5rem;
   border-radius: 4px;
+  border: 1px solid #999;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
@@ -272,6 +273,9 @@ th {
   align-items: center;
   justify-content: center;
   margin: 1.5rem 0;
+  padding: 1.5rem;
+  border: 1px solid #999;
+  border-radius: 4px;
 }
 
 .flow-step {
